@@ -1,9 +1,13 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
+# Added following addional addional container by Chinthaka Deshapriya <chinthaka@ceee.dev>
+# NPMPlus as the reverse proxy - optional
+# Duplicati as the backup tool - optional
+# Stalwart as the mail server  - optional
 
 version: '2'
 services:
-  postgresql:
+  postgresql: 
     image: docker.io/bitnami/postgresql:16
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
