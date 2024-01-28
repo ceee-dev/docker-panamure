@@ -20,7 +20,7 @@ services:
     volumes:
       - 'redis_data:/bitnami/redis'
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      - ALLOW_EMPTY_PASSWORD=no
   elasticsearch:
     image: docker.io/bitnami/elasticsearch:8
     volumes:
@@ -39,11 +39,11 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MASTODON_MODE=web
-      - MASTODON_DATABASE_PASSWORDo=${MASTODON_DATABASE_PASSWORD}
+      - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORDD}
       - ALLOW_EMPTY_PASSWORD=no
       - MASTODON_MODE=streaming
-      - MASTODON_DATABASE_PASSWORD=${MASTODON_DATABASE_PASSWORD}
-      - MASTODON_ELASTICSEARCH_PASSWORD=${MASTODON_ELASTICSEARCH_PASSWOR}
+      - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
+      - MASTODON_ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
   mastodon-sidekiq:
     image: docker.io/bitnami/mastodon:4
     volumes:
@@ -51,8 +51,8 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MASTODON_MODE=sidekiq
-      - MASTODON_DATABASE_PASSWORD=${MASTODON_DATABASE_PASSWORD}
-      - MASTODON_ELASTICSEARCH_PASSWORD=${MASTODON_ELASTICSEARCH_PASSWORD}
+      - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
+      - MASTODON_ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
 volumes:
   postgresql_data:
     driver: local
