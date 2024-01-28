@@ -53,12 +53,21 @@ services:
   mastodon-sidekiq:
     image: docker.io/bitnami/mastodon:4
     volumes:
-      - 'mastodon_data:/bitnami/mastodon'
+      - './mastodon_data:/bitnami/mastodon'
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MASTODON_MODE=sidekiq
       - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
       - MASTODON_ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
+
+
+  minio:
+    image: docker.io/bitnami/minio:2024
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - 'minio_data:/bitnami/minio/data'
 
 volumes:
   postgresql_data:
