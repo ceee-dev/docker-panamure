@@ -15,14 +15,14 @@ services:
       - POSTGRESQL_DATABASE=bitnami_mastodon
       - POSTGRESQL_USERNAME=bn_mastodon
       - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
-  
+
   redis:
     image: docker.io/bitnami/redis:7.0
     volumes:
       - 'redis_data:/bitnami/redis'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
- 
+  
   elasticsearch:
     image: docker.io/bitnami/elasticsearch:8
     volumes:
@@ -32,7 +32,7 @@ services:
       - ELASTICSEARCH_SKIP_TRANSPORT_TLS=true
       - ELASTICSEARCH_ENABLE_REST_TLS=false
       - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
-  
+       
   mastodon:
     image: docker.io/bitnami/mastodon:4
     ports:
@@ -40,13 +40,19 @@ services:
     volumes:
       - 'mastodon_data:/bitnami/mastodon'
     environment:
-      - ALLOW_EMPTY_PASSWORD=no
+      - ALLOW_EMPTY_PASSWORD=yes
       - MASTODON_MODE=web
-      - MASTODON_ADMIN_USERNAME=admin
-      - MASTODON_ADMIN_PASSWORD=${MASTODON_ADMIN_PASSWORD}
       - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
-      - MASTODON_WEB_DOMAIN=${MASTODON_WEB_DOMAIN}
+      - MASTODON_ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
+      
+  mastodon-streaming:
+    image: docker.io/bitnami/mastodon:4
+    ports:
+      - 4000:4000
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
       - MASTODON_MODE=streaming
+      - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
       - MASTODON_ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
   
   mastodon-sidekiq:
@@ -54,21 +60,10 @@ services:
     volumes:
       - 'mastodon_data:/bitnami/mastodon'
     environment:
-      - ALLOW_EMPTY_PASSWORD=no
+      - ALLOW_EMPTY_PASSWORD=yes
       - MASTODON_MODE=sidekiq
       - MASTODON_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
       - MASTODON_ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
-
-  minio:
-    image: docker.io/bitnami/minio:2024
-    ports:
-      - '9000:9000'
-      - '9001:9001'
-    environment:
-      - MINIO_ROOT_USER=minio-root
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-    volumes:
-      - 'minio_data:/bitnami/minio/data'
 
 volumes:
   postgresql_data:
@@ -81,3 +76,4 @@ volumes:
     driver: local
   mastodon_data:
     driver: local
+  
