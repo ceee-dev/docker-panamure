@@ -10,7 +10,7 @@ services:
   postgresql: 
     image: docker.io/bitnami/postgresql:16
     volumes:
-      - './postgresql_data:/bitnami/postgresql'
+      - 'postgresql_data:/bitnami/postgresql'
     environment:
       - POSTGRESQL_DATABASE=bitnami_mastodon
       - POSTGRESQL_USERNAME=bn_mastodon
@@ -19,14 +19,14 @@ services:
   redis:
     image: docker.io/bitnami/redis:7.0
     volumes:
-      - './redis_data:/bitnami/redis'
+      - 'redis_data:/bitnami/redis'
     environment:
-      - ALLOW_EMPTY_PASSWORD=no
+      - ALLOW_EMPTY_PASSWORD=yes
  
   elasticsearch:
     image: docker.io/bitnami/elasticsearch:8
     volumes:
-      - './elasticsearch_data:/bitnami/elasticsearch/data'
+      - 'elasticsearch_data:/bitnami/elasticsearch/data'
     environment:
       - ELASTICSEARCH_ENABLE_SECURITY=true
       - ELASTICSEARCH_SKIP_TRANSPORT_TLS=true
@@ -52,7 +52,7 @@ services:
   mastodon-sidekiq:
     image: docker.io/bitnami/mastodon:4
     volumes:
-      - './mastodon_data:/bitnami/mastodon'
+      - 'mastodon_data:/bitnami/mastodon'
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - MASTODON_MODE=sidekiq
@@ -68,7 +68,7 @@ services:
       - MINIO_ROOT_USER=minio-root
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     volumes:
-      - './minio_data:/bitnami/minio/data'
+      - 'minio_data:/bitnami/minio/data'
 
 volumes:
   postgresql_data:
